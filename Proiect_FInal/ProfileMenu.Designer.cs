@@ -106,6 +106,7 @@
             this.Name = "ProfileMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ProfileMenu";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProfileMenu_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

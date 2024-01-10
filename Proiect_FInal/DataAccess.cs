@@ -48,8 +48,14 @@ namespace Proiect_FInal
         {
             using (IDbConnection connection = new MySqlConnection(Helper.CnnVal("XMAS_RUSH_DB")))
             {
-                var output = connection.Query<Player>("Afiseaza_Ultimul_Jucator").ToList();
-                return output[0];
+                try
+                {
+                    var output = connection.Query<Player>("Afiseaza_Ultimul_Jucator").ToList();
+                    return output[0];
+                } catch (Exception ex)
+                {
+                    return null;
+                }
             }
         }
 

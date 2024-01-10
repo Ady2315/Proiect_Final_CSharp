@@ -45,12 +45,22 @@ namespace Proiect_FInal
         private void deleteProfileButton_Click(object sender, EventArgs e)
         {
             string p = playersList.GetItemText(playersList.SelectedItem);
-            DataAccess db = new DataAccess();
-            db.DeletePlayer(p);
-            players = db.GetPlayers();
+            if (p != null)
+            {
+                Player selected = players.Find(x => x.UserName.Contains(p));
+                DataAccess db = new DataAccess();
+                db.DeletePlayer(p);
+                players = db.GetPlayers();
 
-            MessageBox.Show("Jucatorul " + p + " a fost sters cu succes");
-            RefreshPlayersList();
+                MessageBox.Show("Jucatorul " + p + " a fost sters cu succes");
+                RefreshPlayersList();
+
+                if (selected == meniu.player)
+                {
+                    meniu.player = null;
+                    meniu.UpdateUserName("Creati sau alegi un profil");
+                }
+            }
         }
 
         private void ProfileMenu_Load(object sender, EventArgs e)
@@ -72,12 +82,25 @@ namespace Proiect_FInal
         private void SelectProfile()
         {
             string p = playersList.GetItemText(playersList.SelectedItem);
-            DataAccess db = new DataAccess();
-            db.MarkLastPlayerSelected(p);
-            meniu.player = db.GetLastPlayerSelected();
+            if (p != null)
+            {
+                Player selected = players.Find(x => x.UserName.Contains(p));
+                DataAccess db = new DataAccess();
+                db.MarkLastPlayerSelected(p);
+                meniu.player = db.GetLastPlayerSelected();
 
-            this.Close();
-            meniu.UpdateUserName(p);
+                this.Close();
+                meniu.UpdateCurrentPlayer(selected);
+            }
+        }
+
+        private void ProfileMenu_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (playersList.Items.Count <= 0 && meniu.player != null)
+            {
+                meniu.player = null;
+                meniu.UpdateUserName("Creati un nou profil");
+            }
         }
     }
 }

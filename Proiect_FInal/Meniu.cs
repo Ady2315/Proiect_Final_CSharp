@@ -13,7 +13,7 @@ namespace Proiect_FInal
 {
     public partial class Meniu : Form
     {
-        internal Player player = new Player();
+        internal Player player = null;
         public Meniu()
         {
             InitializeComponent();
@@ -21,11 +21,13 @@ namespace Proiect_FInal
 
             DataAccess db = new DataAccess();
             player = db.GetLastPlayerSelected();
-            UpdateUserName(player.UserName);
+            if (player != null) UpdateUserName(player.UserName);
+            else UpdateUserName("Creati un profil nou");
         }
 
         private void playButton_Click(object sender, EventArgs e)
         {
+            if (player == null) return;
             this.Hide();
             InGame g = new InGame();
             g.Meniu = this;
@@ -54,6 +56,12 @@ namespace Proiect_FInal
         internal void UpdateUserName(string userName)
         {
             playerName.Text = userName;
+        }
+
+        internal void UpdateCurrentPlayer(Player p)
+        {
+            player = p;
+            UpdateUserName(player.UserName);
         }
 
         internal void UpdatePlayerHighScore(int score)
